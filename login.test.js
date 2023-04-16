@@ -40,7 +40,7 @@ describe('Login functionality', () => {
         await loginButton.click();
         const successMessage = await browser.$('#loginstatus');
         const successMessageText = await successMessage.getText();
-        assert.strictEqual(successMessageText, '');
+        assert.strictEqual(successMessageText, 'Welcome, testuser!');
     }, 5000);
 
     it('should not allow login with missing password', async () => {
@@ -49,6 +49,18 @@ describe('Login functionality', () => {
         const password = await browser.$('input[name="Password"]');
         const loginButton = await browser.$("#login");
         await userName.setValue('testuser');
+        await loginButton.click();
+        const errorMessage = await browser.$('#loginstatus');
+        const errorMessageText = await errorMessage.getText();
+        assert.strictEqual(errorMessageText, 'Invalid username/password');
+    }, 5000);
+
+    it('should not allow login with missing login', async () => {
+        await browser.url(loginUrl);
+        const userName = await browser.$('input[name="UserName"]');
+        const password = await browser.$('input[name="Password"]');
+        const loginButton = await browser.$("#login");
+        await password.setValue('pwd');
         await loginButton.click();
         const errorMessage = await browser.$('#loginstatus');
         const errorMessageText = await errorMessage.getText();
